@@ -7,14 +7,11 @@
 # "whats the date"
 
 import sounddevice, queue
-import json, subprocess, datetime
+import json, subprocess, datetime, time
 import vosk
 
 import wikipedia
-#import wolframalpha
-
-#from wolframclient.evaluation import WolframLanguageSession
-#from wolframclient.language import wl
+import wolframalpha
 
 q = queue.Queue()
 def callback(indata, frames, time, status):
@@ -24,10 +21,20 @@ def read_question (sentence):
 
     today = datetime.datetime.now()
 
+    if ("say" in sentence):
+        sentence = sentence.replace("say","")
+        return (sentence)
     if ("calculate" in sentence):
-        sentence.replace("calculate","")
-        wolfy = WolframLanguageSession('/usr/bin/wolfram') 
-        answer = wolfy.evaluate(sentence)
+        sentence = sentence.replace("calculate","")
+        sentence = sentence.replace("plus","+")
+        sentence = sentence.replace("minus","-")
+        sentence = sentence.replace("times","*")
+        print (sentence)
+        app_id = "123456"
+        client = wolframalpha.Client(app_id)
+        res = client.query(sentence)
+        print(res)
+        answer = next(res.results).text
         return (answer)
     if ("time" in sentence):
         now = today.strftime("%H %M")
@@ -41,7 +48,7 @@ def read_question (sentence):
         answer = wikipedia.summary(sentence, sentences = 1)
         return (answer)
     except:
-        return ("I don't know that")
+        return ("mmm")
     return ""
 
 def timeofday():
@@ -52,11 +59,11 @@ def timeofday():
     return (daytime)
 
 def speak(sentence):
-        p = subprocess.Popen(['espeak','-a 10','--stdin'], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT )
-        p.stdin.write(sentence.encode('utf-8'))
-        p.stdin.flush()
-        p.stdin.close()
-        p.wait()
+    p = subprocess.Popen(['espeak','-a 10','--stdin'], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT )
+    p.stdin.write(sentence.encode('utf-8'))
+    p.stdin.flush()
+    p.stdin.close()
+    p.wait()
 
 device_info = sounddevice.query_devices(None, "input")
 samplerate = int(device_info["default_samplerate"])
@@ -80,7 +87,7 @@ while True:
         if (question != "") :
             print(question)
             answer = read_question(question)
-            if (answer !+ "") :
+            if (answer != "") :
                  stream.stop() # stop listening while we are speaking
                  print (">>",answer)
                  speak(answer)

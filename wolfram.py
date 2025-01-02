@@ -17,3 +17,4 @@ while True:
 
     print(out)
     print ("done in " + str(duration))
+
