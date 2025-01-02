@@ -1,4 +1,6 @@
 # pip3 install wolframclient
+# sudo apt-get install wolfram-engine (free on pi)
+
 import time
 from wolframclient.evaluation import WolframLanguageSession
 from wolframclient.language import wl
