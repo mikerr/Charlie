@@ -1,3 +1,4 @@
+# pip3 install wolframclient
 import time
 from wolframclient.evaluation import WolframLanguageSession
 from wolframclient.language import wl
