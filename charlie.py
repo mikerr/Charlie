@@ -95,11 +95,13 @@ while True:
         jres = json.loads(rec.Result())
         question = jres["text"]
         if (question != "") :
-            print(question)
+            thetime = datetime.datetime.now().strftime("%H:%M:%S")
+            print(thetime, ":", question)
             answer = read_question(question)
             if (answer != "") :
                  stream.stop() # stop listening while we are speaking
-                 print (">>",answer)
+                 thetime = datetime.datetime.now().strftime("%H:%M:%S")
+                 print (thetime, ">>",answer)
                  speak(answer)
                  stream.start() # start listening again
   except:
