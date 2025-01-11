@@ -5,7 +5,7 @@ A local voice assistant in python
 
 Uses ```vosk``` for voice recognition and ```espeak``` for speech
 
-    pip3 install vosk sounddevice wolframclient
+    pip3 install vosk sounddevice wolframclient wikipedia
     sudo apt-get install libportaudio2 espeak
 
 
