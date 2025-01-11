@@ -44,11 +44,21 @@ def read_question (sentence):
         now = today.strftime("%B %d")
         answer = "the date is " + now
         return answer
+
+    sentence = "summarize in one sentence: " + sentence
+    p = subprocess.Popen('ollama run qwen2.5:3b', stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True )
+    p.stdin.write(sentence.encode('utf-8'))
+    # p.stdin.flush()
+    # p.stdin.close()
+    # p.wait()
+    answer =  p.communicate()[0].decode()
+    return answer
+
     try: 
         answer = wikipedia.summary(sentence, sentences = 1)
         return (answer)
     except:
-        return ("mmm")
+        return ("hmm")
     return ""
 
 def timeofday():
@@ -59,7 +69,7 @@ def timeofday():
     return (daytime)
 
 def speak(sentence):
-    p = subprocess.Popen(['espeak','-a 10','--stdin'], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT )
+    p = subprocess.Popen(['espeak','-a 90','--stdin'], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT )
     p.stdin.write(sentence.encode('utf-8'))
     p.stdin.flush()
     p.stdin.close()
